@@ -18,7 +18,7 @@ public class Main {
             while (line != null) {
                 System.out.println(line);
                 
-                System.out.print("dk512");
+                System.out.print("dk51");
                 
                 line = reader.readLine();
             }
