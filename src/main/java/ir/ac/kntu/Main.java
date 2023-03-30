@@ -3,11 +3,13 @@ package ir.ac.kntu;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.*;
 import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
+        int line_count=0;
         Scanner scanner = new Scanner(System.in);
         String fileName = scanner.nextLine();
         BufferedReader reader;
@@ -16,11 +18,16 @@ public class Main {
             String line = reader.readLine();
 
             while (line != null) {
-                System.out.println(line);
                 
-                System.out.print("dk51");
+                if(line.startsWith("package ") && line_count==0)
+                {
+                     System.out.println("packege error");
+                }
+
                 
+
                 line = reader.readLine();
+                line_count++;
             }
             reader.close();
         } catch (IOException e) {
