@@ -19,11 +19,6 @@ public class Main {
 
             while (line != null) {
                 
-                if(line.startsWith("package ") && line_count==0)
-                {
-                     System.out.println("packege error");
-                }
-
                 
 
                 line = reader.readLine();
