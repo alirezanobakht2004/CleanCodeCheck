@@ -19,8 +19,12 @@ public class Main {
 
             while (line != null) {
                 
+                if(line.startsWith("package ") && line_count!=0)
+                {
+                     System.out.printf("package_error in line %d",line_count);
+                }
                 
-
+                
                 line = reader.readLine();
                 line_count++;
             }
