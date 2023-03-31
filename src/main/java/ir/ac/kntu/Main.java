@@ -24,7 +24,7 @@ public class Main {
             String line = reader.readLine();
 
             while (line != null) {
-                check_var(line,line_count);
+                check_var(line.trim(), line_count);
                 int count = 0;
                 for (int i = 0; i < line.length(); i++) {
                     if (line.charAt(i) == ';') {
@@ -34,25 +34,25 @@ public class Main {
                 if (count > 1) {
                     System.out.printf("semicolon error in line %d\n", line_count);
                 }
-                if (line.length() > 80) {
+                if (line.trim().length() > 80) {
                     System.out.printf("line.length in line %d\n", line_count);
                 }
-                if (line.startsWith("package ") && line_count != 1) {
+                if (line.trim().startsWith("package ") && line_count != 1) {
                     System.out.printf("package_error in line %d\n", line_count);
                 }
-                if (line.startsWith("import ") && public_class_arrived != 0) {
+                if (line.trim().startsWith("import ") && public_class_arrived != 0) {
                     System.out.printf("import_error in line %d\n", line_count);
                 }
-                if (line.startsWith("public class ")) {
+                if (line.trim().startsWith("public class ")) {
                     public_class_arrived = 1;
-                    if (!line.matches("public class [A-Z][a-zA-Z].*")) {
+                    if (!line.trim().matches("public class [A-Z][a-zA-Z].*")) {
                         System.out.printf("classname_error in line %d\n", line_count);
                     }
                 }
-                if (line.startsWith("    public static void main")) {
+                if (line.trim().startsWith("public static void main")) {
                     public_class_main = 1;
                 }
-                if (line.startsWith("    public static ")) {
+                if (line.trim().startsWith("public static ")) {
                     check_met(line, line_count);
                 }
                 line = reader.readLine();
@@ -74,16 +74,20 @@ public class Main {
     }
 
     public static void check_var(String line, int line_N) {
-        String pattern = "(\\b[a-zA-Z_]\\W*)\\s*=.*";
-
-        Pattern p = Pattern.compile(pattern);
-        Matcher m = p.matcher(line);
-        if(m.find())
-        {
-            String variableName = m.group(1);
-            if(!variableName.matches("^[a-z]+([A-Z][a-z]*)*$"))
-            {
-                System.out.println("variable_error in line :" + line_N);
+        if (line.matches("^int.*") || line.matches("^float.*") || line.matches("^double.*") || line.matches("^String.*")
+                || line.matches("^boolean.*") || line.matches("^char.*") || line.matches("^long.*")
+                || line.matches("^byte.*")) {
+            int seminIndex = line.indexOf(";");
+            int eqIndex =1000;
+            for (int i = 0; i < line.length(); i++) {
+                if (line.charAt(i) == '=') {
+                     eqIndex = line.indexOf("=");
+                }
+            } 
+            int lastSpaceIndex = line.lastIndexOf(" ", Math.min(seminIndex, eqIndex));
+            String varName = line.substring(lastSpaceIndex + 1, Math.min(seminIndex, eqIndex));
+            if (!varName.matches("^[a-z]+([A-Z][a-z]*)*$")) {
+                System.out.println("varerror method:  " + varName + " in Line: " + line_N);
             }
         }
     }

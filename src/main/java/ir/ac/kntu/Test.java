@@ -3,17 +3,20 @@ package ir.ac.kntu;
 public class Test {
     public static void main(String[] args) {
         System.out.println("jjdsfl");
-        int jdkj=9;
-    
+        int tdkk=9;
+        boolean jsdjl,hkj;
+        byte jhsk;
+        int Kl;
     }
 
     public static void tabee(String review) {
         // TODO
     }
 
-    public static void LowerCamelCase(double score) {
+    public static void lowerCamelCase(double score) {
         // TODO
-        boolean LowerCamelCase;
+        int u;
+        
     }
 
     public static int getId() {
