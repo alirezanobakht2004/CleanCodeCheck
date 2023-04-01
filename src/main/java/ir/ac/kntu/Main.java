@@ -30,10 +30,26 @@ public class Main {
                     koro_count--;
                 }
                 if (!line.trim().equals("") && !check_sp(line, koro_count)) {
-                    System.out.println("Space_error in line: " + line_count);
+                    System.out.println("khat_chini in line: " + line_count);
                 }
                 if (line.contains("{")) {
                     koro_count++;
+                }
+
+                if (line.contains("while") || line.contains("for") || line.contains("if") || line.contains("else")) {
+                    if (!line.contains("{")) {
+                        System.out.println("khat_chini in line: " + line_count);
+                    }
+                    else if (line.matches(".*[{].*[;].*"))
+                    {
+                        System.out.println("khat_chini in line: " + line_count);
+                    }
+                }
+
+                if (line.contains("else")) {
+                    if (!line.contains("}")) {
+                        System.out.println("khat_chini in line: " + line_count);
+                    }
                 }
 
                 check_var(line.trim(), line_count);
@@ -43,7 +59,7 @@ public class Main {
                         count++;
                     }
                 }
-                if (count > 1) {
+                if (count > 1 && !line.contains("for")) {
                     System.out.printf("semicolon error in line %d\n", line_count);
                 }
                 if (line.trim().length() > 80) {
