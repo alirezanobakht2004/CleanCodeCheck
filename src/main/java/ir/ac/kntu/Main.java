@@ -12,6 +12,7 @@ import java.lang.reflect.*;
 public class Main {
 
     public static void main(String[] args) {
+        int koro_count = 0;
         int line_count = 1;
         int public_class_arrived = 0;
         int public_class_main = 0;
@@ -24,6 +25,17 @@ public class Main {
             String line = reader.readLine();
 
             while (line != null) {
+
+                if (line.contains("}")) {
+                    koro_count--;
+                }
+                if (!line.trim().equals("") && !check_sp(line, koro_count)) {
+                    System.out.println("Space_error in line: " + line_count);
+                }
+                if (line.contains("{")) {
+                    koro_count++;
+                }
+
                 check_var(line.trim(), line_count);
                 int count = 0;
                 for (int i = 0; i < line.length(); i++) {
@@ -55,6 +67,7 @@ public class Main {
                 if (line.trim().startsWith("public static ")) {
                     check_met(line, line_count);
                 }
+
                 line = reader.readLine();
                 line_count++;
             }
@@ -74,21 +87,34 @@ public class Main {
     }
 
     public static void check_var(String line, int line_N) {
-        if (line.matches("^int.*") || line.matches("^float.*") || line.matches("^double.*") || line.matches("^String.*")
-                || line.matches("^boolean.*") || line.matches("^char.*") || line.matches("^long.*")
-                || line.matches("^byte.*")) {
-            int seminIndex = line.indexOf(";");
-            int eqIndex =1000;
-            for (int i = 0; i < line.length(); i++) {
-                if (line.charAt(i) == '=') {
-                     eqIndex = line.indexOf("=");
+        if (line.matches("int.*") || line.matches("float.*") || line.matches("double.*") || line.matches("String.*")
+                || line.matches("boolean.*") || line.matches("char.*") || line.matches("long.*")
+                || line.matches("byte.*")) {
+            int endIndex = 1000;
+
+            for (int i = line.indexOf(" ") + 1; i < line.length(); i++) {
+                if (line.charAt(i) == ' ' || line.charAt(i) == ';' || line.charAt(i) == '=') {
+                    endIndex = i;
+                    break;
                 }
-            } 
-            int lastSpaceIndex = line.lastIndexOf(" ", Math.min(seminIndex, eqIndex));
-            String varName = line.substring(lastSpaceIndex + 1, Math.min(seminIndex, eqIndex));
-            if (!varName.matches("^[a-z]+([A-Z][a-z]*)*$")) {
-                System.out.println("varerror method:  " + varName + " in Line: " + line_N);
             }
+            String varName = line.substring(line.indexOf(" ") + 1, endIndex);
+            if (!varName.matches("^[a-z]+([A-Z][a-z]*)*$")) {
+                System.out.println("varerror : " + varName + " in Line: " + line_N);
+            }
+        }
+    }
+
+    public static boolean check_sp(String line, int num) {
+        for (int h = 0; h < num * 4; h++) {
+            if (line.charAt(h) != ' ') {
+                return false;
+            }
+        }
+        if (line.charAt(num * 4) == ' ') {
+            return false;
+        } else {
+            return true;
         }
     }
 }
