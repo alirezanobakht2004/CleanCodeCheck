@@ -14,8 +14,6 @@ public class Main {
     public static void main(String[] args) {
         int koro_count = 0;
         int line_count = 1;
-        int public_class_arrived = 0;
-        int public_class_main = 0;
         Scanner scanner = new Scanner(System.in);
         String fileName = scanner.nextLine();
         BufferedReader reader;
@@ -36,53 +34,21 @@ public class Main {
                     koro_count++;
                 }
 
-                if (line.contains("while") || line.contains("for") || line.contains("if") || line.contains("else")) {
-                    if (!line.contains("{")) {
-                        System.out.println("khat_chini in line: " + line_count);
-                    }
-                    else if (line.matches(".*[{].*[;].*"))
-                    {
-                        System.out.println("khat_chini in line: " + line_count);
-                    }
-                }
-
-                if (line.contains("else")) {
-                    if (!line.contains("}")) {
-                        System.out.println("khat_chini in line: " + line_count);
-                    }
-                }
+                check_loop_if(line, line_count);
 
                 check_var(line.trim(), line_count);
-                int count = 0;
-                for (int i = 0; i < line.length(); i++) {
-                    if (line.charAt(i) == ';') {
-                        count++;
-                    }
-                }
-                if (count > 1 && !line.contains("for")) {
-                    System.out.printf("semicolon error in line %d\n", line_count);
-                }
-                if (line.trim().length() > 80) {
-                    System.out.printf("line.length in line %d\n", line_count);
-                }
-                if (line.trim().startsWith("package ") && line_count != 1) {
-                    System.out.printf("package_error in line %d\n", line_count);
-                }
-                if (line.trim().startsWith("import ") && public_class_arrived != 0) {
-                    System.out.printf("import_error in line %d\n", line_count);
-                }
-                if (line.trim().startsWith("public class ")) {
-                    public_class_arrived = 1;
-                    if (!line.trim().matches("public class [A-Z][a-zA-Z].*")) {
-                        System.out.printf("classname_error in line %d\n", line_count);
-                    }
-                }
-                if (line.trim().startsWith("public static void main")) {
-                    public_class_main = 1;
-                }
-                if (line.trim().startsWith("public static ")) {
-                    check_met(line, line_count);
-                }
+
+                check_semi(line, line_count);
+
+                check_length(line, line_count);
+
+                check_package(line, line_count);
+
+                check_import(line, line_count);
+
+                check_class_name(line, line_count);
+
+                check_met(line, line_count);
 
                 line = reader.readLine();
                 line_count++;
@@ -94,11 +60,13 @@ public class Main {
     }
 
     public static void check_met(String line, int line_N) {
-        int openParenIndex = line.indexOf("(");
-        int lastSpaceIndex = line.lastIndexOf(" ", openParenIndex);
-        String methodName = line.substring(lastSpaceIndex + 1, openParenIndex);
-        if (!methodName.matches("^[a-z]+([A-Z][a-z]*)*$")) {
-            System.out.println("methoderror method:  " + methodName + " in Line: " + line_N);
+        if (line.trim().startsWith("public static ")) {
+            int openParenIndex = line.indexOf("(");
+            int lastSpaceIndex = line.lastIndexOf(" ", openParenIndex);
+            String methodName = line.substring(lastSpaceIndex + 1, openParenIndex);
+            if (!methodName.matches("^[a-z]+([A-Z][a-z]*)*$")) {
+                System.out.println("methoderror method:  " + methodName + " in Line: " + line_N);
+            }
         }
     }
 
@@ -133,4 +101,59 @@ public class Main {
             return true;
         }
     }
+
+    public static void check_loop_if(String line, int line_N) {
+        if (line.contains("while") || line.contains("for") || line.contains("if") || line.contains("else")) {
+            if (!line.contains("{")) {
+                System.out.println("khat_chini in line: " + line_N);
+            } else if (line.matches(".*[{].*[;].*")) {
+                System.out.println("khat_chini in line: " + line_N);
+            }
+        }
+
+        if (line.contains("else")) {
+            if (!line.contains("}")) {
+                System.out.println("khat_chini in line: " + line_N);
+            }
+        }
+    }
+
+    public static void check_semi(String line, int line_N) {
+        int count = 0;
+        for (int i = 0; i < line.length(); i++) {
+            if (line.charAt(i) == ';') {
+                count++;
+            }
+        }
+        if (count > 1 && !line.contains("for")) {
+            System.out.printf("semicolon error in line %d\n", line_N);
+        }
+    }
+
+    public static void check_length(String line, int line_N) {
+        if (line.length() > 80) {
+            System.out.printf("line.length in line %d\n", line_N);
+        }
+    }
+
+    public static void check_package(String line, int line_N) {
+        if (line.trim().startsWith("package ") && line_N != 1) {
+            System.out.printf("package_error in line %d\n", line_N);
+        }
+    }
+
+    public static void check_import(String line, int line_N) {
+        if (line.trim().startsWith("import ")) {
+            System.out.printf("import_error in line %d\n", line_N);
+        }
+    }
+
+    public static void check_class_name(String line, int line_N) {
+        if (line.trim().startsWith("public class ")) {
+            if (!line.trim().matches("public class [A-Z][a-zA-Z].*")) {
+                System.out.printf("classname_error in line %d\n", line_N);
+            }
+        }
+    }
+
 }
