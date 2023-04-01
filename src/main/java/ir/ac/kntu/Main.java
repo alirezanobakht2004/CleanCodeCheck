@@ -14,6 +14,7 @@ public class Main {
     public static void main(String[] args) {
         int koroCount = 0;
         int lineCount = 1;
+        String defaultCheck = "";
         Scanner scanner = new Scanner(System.in);
         String fileName = scanner.nextLine();
         BufferedReader reader;
@@ -23,15 +24,20 @@ public class Main {
             String line = reader.readLine();
 
             while (line != null) {
-                koroCount += checkKoro1(line);
+
+                koroCount += checkKoro(line);
+                koroCount += checkKoro1(line, defaultCheck);
+                defaultCheck = defCeck(line, defaultCheck);
                 checkSpace(line, koroCount, lineCount);
                 koroCount += checkKoro2(line);
+                koroCount += checkKoro3(line, lineCount);
+                defaultCheck = defCeck(line, defaultCheck);
+                checkCase(line, lineCount);
                 checkLoopIf(line, lineCount);
                 checkVar(line.trim(), lineCount);
                 checkSemi(line, lineCount);
                 checkLength(line, lineCount);
                 checkPackage(line, lineCount);
-                checkImport(line, lineCount);
                 checkClassName(line, lineCount);
                 checkMet(line, lineCount);
 
@@ -88,7 +94,8 @@ public class Main {
     }
 
     public static void checkLoopIf(String line, int lineN) {
-        if (line.contains("while") || line.contains("for") || line.contains("if") || line.contains("else")) {
+        if (line.contains("while") || line.contains("for") || line.contains("if") ||
+                line.contains("else") || line.contains("switch")) {
             if (!line.contains("{")) {
                 System.out.println("khat_chini in line: " + lineN);
             } else if (line.matches(".*[{].*[;].*")) {
@@ -127,12 +134,6 @@ public class Main {
         }
     }
 
-    public static void checkImport(String line, int lineN) {
-        if (line.trim().startsWith("import ")) {
-            System.out.printf("import_error in line %d\n", lineN);
-        }
-    }
-
     public static void checkClassName(String line, int lineN) {
         if (line.trim().startsWith("public class ")) {
             if (!line.trim().matches("public class [A-Z][a-zA-Z].*")) {
@@ -141,7 +142,7 @@ public class Main {
         }
     }
 
-    public static int checkKoro1(String line) {
+    public static int checkKoro(String line) {
         if (line.contains("}")) {
             return -1;
         } else {
@@ -160,6 +161,52 @@ public class Main {
     public static void checkSpace(String line, int koroCount, int lineCount) {
         if (!line.trim().equals("") && !checkSp(line, koroCount)) {
             System.out.println("khat_chini in line: " + lineCount);
+        }
+    }
+
+    public static void checkCase(String line, int lineN) {
+        if (line.trim().startsWith("case") || line.trim().startsWith("default")) {
+            if (line.contains(";")) {
+                System.out.printf("case_or_default_error in line %d\n", lineN);
+            }
+        }
+    }
+
+    public static int checkKoro3(String line, int lineCount) {
+        if (line.contains("break")) {
+            if (line.contains(":")) {
+                System.out.printf("semicolon error in line %d\n", lineCount);
+            }
+            return -1;
+        }
+        if (line.contains("case") && !line.contains(";")) {
+            return 1;
+        }
+        if (line.contains("default") && !line.contains(";")) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    public static String defCeck(String line, String defaultCheck) {
+        if (line.contains("}") && defaultCheck.trim().startsWith("default")) {
+            return "";
+        }
+        if (line.contains("default") && !line.contains(";")) {
+            return line;
+        } else if (defaultCheck.contains("default")) {
+            return defaultCheck;
+        } else {
+            return "";
+        }
+    }
+
+    public static int checkKoro1(String line, String defaultCheck) {
+        if (line.contains("}") && defaultCheck.trim().startsWith("default")) {
+            return -1;
+        } else {
+            return 0;
         }
     }
 }
