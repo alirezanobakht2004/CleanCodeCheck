@@ -23,17 +23,9 @@ public class Main {
             String line = reader.readLine();
 
             while (line != null) {
-
-                if (line.contains("}")) {
-                    koroCount--;
-                }
-                if (!line.trim().equals("") && !checkSp(line, koroCount)) {
-                    System.out.println("khat_chini in line: " + lineCount);
-                }
-                if (line.contains("{")) {
-                    koroCount++;
-                }
-
+                koroCount += checkKoro1(line);
+                checkSpace(line, koroCount, lineCount);
+                koroCount += checkKoro2(line);
                 checkLoopIf(line, lineCount);
                 checkVar(line.trim(), lineCount);
                 checkSemi(line, lineCount);
@@ -149,4 +141,25 @@ public class Main {
         }
     }
 
+    public static int checkKoro1(String line) {
+        if (line.contains("}")) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
+
+    public static int checkKoro2(String line) {
+        if (line.contains("{")) {
+            return +1;
+        } else {
+            return 0;
+        }
+    }
+
+    public static void checkSpace(String line, int koroCount, int lineCount) {
+        if (!line.trim().equals("") && !checkSp(line, koroCount)) {
+            System.out.println("khat_chini in line: " + lineCount);
+        }
+    }
 }
