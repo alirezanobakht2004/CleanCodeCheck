@@ -12,8 +12,8 @@ import java.lang.reflect.*;
 public class Main {
 
     public static void main(String[] args) {
-        int koro_count = 0;
-        int line_count = 1;
+        int koroCount = 0;
+        int lineCount = 1;
         Scanner scanner = new Scanner(System.in);
         String fileName = scanner.nextLine();
         BufferedReader reader;
@@ -25,33 +25,26 @@ public class Main {
             while (line != null) {
 
                 if (line.contains("}")) {
-                    koro_count--;
+                    koroCount--;
                 }
-                if (!line.trim().equals("") && !check_sp(line, koro_count)) {
-                    System.out.println("khat_chini in line: " + line_count);
+                if (!line.trim().equals("") && !checkSp(line, koroCount)) {
+                    System.out.println("khat_chini in line: " + lineCount);
                 }
                 if (line.contains("{")) {
-                    koro_count++;
+                    koroCount++;
                 }
 
-                check_loop_if(line, line_count);
-
-                check_var(line.trim(), line_count);
-
-                check_semi(line, line_count);
-
-                check_length(line, line_count);
-
-                check_package(line, line_count);
-
-                check_import(line, line_count);
-
-                check_class_name(line, line_count);
-
-                check_met(line, line_count);
+                checkLoopIf(line, lineCount);
+                checkVar(line.trim(), lineCount);
+                checkSemi(line, lineCount);
+                checkLength(line, lineCount);
+                checkPackage(line, lineCount);
+                checkImport(line, lineCount);
+                checkClassName(line, lineCount);
+                checkMet(line, lineCount);
 
                 line = reader.readLine();
-                line_count++;
+                lineCount++;
             }
             reader.close();
         } catch (IOException e) {
@@ -59,18 +52,18 @@ public class Main {
         }
     }
 
-    public static void check_met(String line, int line_N) {
+    public static void checkMet(String line, int lineN) {
         if (line.trim().startsWith("public static ")) {
             int openParenIndex = line.indexOf("(");
             int lastSpaceIndex = line.lastIndexOf(" ", openParenIndex);
             String methodName = line.substring(lastSpaceIndex + 1, openParenIndex);
             if (!methodName.matches("^[a-z]+([A-Z][a-z]*)*$")) {
-                System.out.println("methoderror method:  " + methodName + " in Line: " + line_N);
+                System.out.println("methoderror method:  " + methodName + " in Line: " + lineN);
             }
         }
     }
 
-    public static void check_var(String line, int line_N) {
+    public static void checkVar(String line, int lineN) {
         if (line.matches("int.*") || line.matches("float.*") || line.matches("double.*") || line.matches("String.*")
                 || line.matches("boolean.*") || line.matches("char.*") || line.matches("long.*")
                 || line.matches("byte.*")) {
@@ -84,12 +77,12 @@ public class Main {
             }
             String varName = line.substring(line.indexOf(" ") + 1, endIndex);
             if (!varName.matches("^[a-z]+([A-Z][a-z]*)*$")) {
-                System.out.println("varerror : " + varName + " in Line: " + line_N);
+                System.out.println("varerror : " + varName + " in Line: " + lineN);
             }
         }
     }
 
-    public static boolean check_sp(String line, int num) {
+    public static boolean checkSp(String line, int num) {
         for (int h = 0; h < num * 4; h++) {
             if (line.charAt(h) != ' ') {
                 return false;
@@ -102,23 +95,23 @@ public class Main {
         }
     }
 
-    public static void check_loop_if(String line, int line_N) {
+    public static void checkLoopIf(String line, int lineN) {
         if (line.contains("while") || line.contains("for") || line.contains("if") || line.contains("else")) {
             if (!line.contains("{")) {
-                System.out.println("khat_chini in line: " + line_N);
+                System.out.println("khat_chini in line: " + lineN);
             } else if (line.matches(".*[{].*[;].*")) {
-                System.out.println("khat_chini in line: " + line_N);
+                System.out.println("khat_chini in line: " + lineN);
             }
         }
 
         if (line.contains("else")) {
             if (!line.contains("}")) {
-                System.out.println("khat_chini in line: " + line_N);
+                System.out.println("khat_chini in line: " + lineN);
             }
         }
     }
 
-    public static void check_semi(String line, int line_N) {
+    public static void checkSemi(String line, int lineN) {
         int count = 0;
         for (int i = 0; i < line.length(); i++) {
             if (line.charAt(i) == ';') {
@@ -126,32 +119,32 @@ public class Main {
             }
         }
         if (count > 1 && !line.contains("for")) {
-            System.out.printf("semicolon error in line %d\n", line_N);
+            System.out.printf("semicolon error in line %d\n", lineN);
         }
     }
 
-    public static void check_length(String line, int line_N) {
+    public static void checkLength(String line, int lineN) {
         if (line.length() > 80) {
-            System.out.printf("line.length in line %d\n", line_N);
+            System.out.printf("line.length in line %d\n", lineN);
         }
     }
 
-    public static void check_package(String line, int line_N) {
-        if (line.trim().startsWith("package ") && line_N != 1) {
-            System.out.printf("package_error in line %d\n", line_N);
+    public static void checkPackage(String line, int lineN) {
+        if (line.trim().startsWith("package ") && lineN != 1) {
+            System.out.printf("package_error in line %d\n", lineN);
         }
     }
 
-    public static void check_import(String line, int line_N) {
+    public static void checkImport(String line, int lineN) {
         if (line.trim().startsWith("import ")) {
-            System.out.printf("import_error in line %d\n", line_N);
+            System.out.printf("import_error in line %d\n", lineN);
         }
     }
 
-    public static void check_class_name(String line, int line_N) {
+    public static void checkClassName(String line, int lineN) {
         if (line.trim().startsWith("public class ")) {
             if (!line.trim().matches("public class [A-Z][a-zA-Z].*")) {
-                System.out.printf("classname_error in line %d\n", line_N);
+                System.out.printf("classname_error in line %d\n", lineN);
             }
         }
     }

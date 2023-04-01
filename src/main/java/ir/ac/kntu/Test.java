@@ -6,7 +6,7 @@ public class Test {
         int tdkk = 9;
         boolean jsdjl;
         byte jhsk;
-        int Kl;
+        int ki;
         while (true) {
             System.out.println("kl");
         }
