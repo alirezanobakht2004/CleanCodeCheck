@@ -7,6 +7,10 @@ import java.io.IOException;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.lang.model.element.Element;
+import javax.lang.model.util.ElementScanner14;
+
 import java.lang.reflect.*;
 
 public class Main {
@@ -15,6 +19,7 @@ public class Main {
         int koroCount = 0;
         int lineCount = 1;
         String defaultCheck = "";
+        String loopCheck = "";
         Scanner scanner = new Scanner(System.in);
         String fileName = scanner.nextLine();
         BufferedReader reader;
@@ -25,21 +30,22 @@ public class Main {
 
             while (line != null) {
 
-                koroCount += checkKoro(line);
-                koroCount += checkKoro1(line, defaultCheck);
-                defaultCheck = defCeck(line, defaultCheck);
-                checkSpace(line, koroCount, lineCount);
-                koroCount += checkKoro2(line);
-                koroCount += checkKoro3(line, lineCount);
-                defaultCheck = defCeck(line, defaultCheck);
-                checkCase(line, lineCount);
-                checkLoopIf(line, lineCount);
+                koroCount += checkKoro(strCheck(line));
+                koroCount += checkKoro1(strCheck(line), defaultCheck);
+                defaultCheck = defCeck(strCheck(line), defaultCheck);
+                loopCheck = loopCheck(strCheck(line), loopCheck);
+                checkSpace(strCheck(line), koroCount, lineCount);
+                koroCount += checkKoro2(strCheck(line));
+                koroCount += checkKoro3(strCheck(line), lineCount, loopCheck);
+                defaultCheck = defCeck(strCheck(line), defaultCheck);
+                checkCase(strCheck(line), lineCount);
+                checkLoopIf(strCheck(line), lineCount);
                 checkVar(line.trim(), lineCount);
-                checkSemi(line, lineCount);
+                checkSemi(strCheck(line), lineCount);
                 checkLength(line, lineCount);
-                checkPackage(line, lineCount);
-                checkClassName(line, lineCount);
-                checkMet(line, lineCount);
+                checkPackage(strCheck(line), lineCount);
+                checkClassName(strCheck(line), lineCount);
+                checkMet(strCheck(line), lineCount);
 
                 line = reader.readLine();
                 lineCount++;
@@ -48,6 +54,13 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static String strCheck(String line) {
+        String regex = "\"[^\"]*\"";
+        String placeholder = "###";
+        String modkhat = line.replaceAll(regex, placeholder);
+        return modkhat;
     }
 
     public static void checkMet(String line, int lineN) {
@@ -172,8 +185,8 @@ public class Main {
         }
     }
 
-    public static int checkKoro3(String line, int lineCount) {
-        if (line.contains("break")) {
+    public static int checkKoro3(String line, int lineCount, String loopCheck) {
+        if (line.contains("break") && loopCheck.equals("")) {
             if (line.contains(":")) {
                 System.out.printf("semicolon error in line %d\n", lineCount);
             }
@@ -207,6 +220,19 @@ public class Main {
             return -1;
         } else {
             return 0;
+        }
+    }
+
+    public static String loopCheck(String line, String loopCheck) {
+        if (line.contains("for") || line.contains("while")) {
+            return "loop";
+        } else if (loopCheck.equals("loop") && !line.contains("break")) {
+            return "loop";
+        } else if (loopCheck.equals("loop") && line.contains("break")) {
+            return "loop_not";
+        } else {
+
+            return "";
         }
     }
 }
