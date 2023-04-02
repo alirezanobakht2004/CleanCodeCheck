@@ -18,7 +18,7 @@ public class Main {
     public static void main(String[] args) {
         int koroCount = 0;
         int lineCount = 1;
-        String defaultCheck = "";
+        String defCheck = "";
         String loopCheck = "";
         Scanner scanner = new Scanner(System.in);
         String fileName = scanner.nextLine();
@@ -31,13 +31,13 @@ public class Main {
             while (line != null) {
 
                 koroCount += checkKoro(strCheck(line));
-                koroCount += checkKoro1(strCheck(line), defaultCheck);
-                defaultCheck = defCeck(strCheck(line), defaultCheck);
+                koroCount += checkKoroOne(strCheck(line), defCheck);
+                defCheck = defCeck(strCheck(line), defCheck);
                 loopCheck = loopCheck(strCheck(line), loopCheck);
                 checkSpace(strCheck(line), koroCount, lineCount);
-                koroCount += checkKoro2(strCheck(line));
-                koroCount += checkKoro3(strCheck(line), lineCount, loopCheck);
-                defaultCheck = defCeck(strCheck(line), defaultCheck);
+                koroCount += checkKoroTwo(strCheck(line));
+                koroCount += checkKoroThree(strCheck(line), lineCount, loopCheck);
+                defCheck = defCeck(strCheck(line), defCheck);
                 checkCase(strCheck(line), lineCount);
                 checkLoopIf(strCheck(line), lineCount);
                 checkVar(line.trim(), lineCount);
@@ -107,8 +107,8 @@ public class Main {
     }
 
     public static void checkLoopIf(String line, int lineN) {
-        if (line.contains("while") || line.contains("for") || line.contains("if") ||
-                line.contains("else") || line.contains("switch")) {
+        if (line.contains("while") || line.contains("for") || line.contains("if") || line.contains("else")
+                || line.contains("switch")) {
             if (!line.contains("{")) {
                 System.out.println("khat_chini in line: " + lineN);
             } else if (line.matches(".*[{].*[;].*")) {
@@ -163,7 +163,7 @@ public class Main {
         }
     }
 
-    public static int checkKoro2(String line) {
+    public static int checkKoroTwo(String line) {
         if (line.contains("{")) {
             return +1;
         } else {
@@ -185,7 +185,7 @@ public class Main {
         }
     }
 
-    public static int checkKoro3(String line, int lineCount, String loopCheck) {
+    public static int checkKoroThree(String line, int lineCount, String loopCheck) {
         if (line.contains("break") && loopCheck.equals("")) {
             if (line.contains(":")) {
                 System.out.printf("semicolon error in line %d\n", lineCount);
@@ -202,21 +202,21 @@ public class Main {
         }
     }
 
-    public static String defCeck(String line, String defaultCheck) {
-        if (line.contains("}") && defaultCheck.trim().startsWith("default")) {
+    public static String defCeck(String line, String defCheck) {
+        if (line.contains("}") && defCheck.trim().startsWith("default")) {
             return "";
         }
         if (line.contains("default") && !line.contains(";")) {
             return line;
-        } else if (defaultCheck.contains("default")) {
-            return defaultCheck;
+        } else if (defCheck.contains("default")) {
+            return defCheck;
         } else {
             return "";
         }
     }
 
-    public static int checkKoro1(String line, String defaultCheck) {
-        if (line.contains("}") && defaultCheck.trim().startsWith("default")) {
+    public static int checkKoroOne(String line, String defCheck) {
+        if (line.contains("}") && defCheck.trim().startsWith("default")) {
             return -1;
         } else {
             return 0;
