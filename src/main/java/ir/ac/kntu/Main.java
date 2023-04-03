@@ -20,6 +20,8 @@ public class Main {
         int lineCount = 1;
         String defCheck = "";
         String loopCheck = "";
+        boolean swiCheck = false;
+        int korocheck1 = 1;
         Scanner scanner = new Scanner(System.in);
         String fileName = scanner.nextLine();
         BufferedReader reader;
@@ -32,8 +34,11 @@ public class Main {
 
                 koroCount += checkKoro(strCheck(line));
                 koroCount += checkKoroOne(strCheck(line), defCheck);
+
+                swiCheck = defExCheck(strCheck(line), swiCheck, koroCount, korocheck1, defCheck);
                 defCheck = defCeck(strCheck(line), defCheck);
                 loopCheck = loopCheck(strCheck(line), loopCheck);
+
                 checkSpace(strCheck(line), koroCount, lineCount);
                 koroCount += checkKoroTwo(strCheck(line));
                 koroCount += checkKoroThree(strCheck(line), lineCount, loopCheck);
@@ -111,9 +116,10 @@ public class Main {
                 || line.contains("switch")) {
             if (!line.contains("{")) {
                 System.out.println("khat_chini in line: " + lineN);
-            } else if (line.matches(".*[{].*[;].*")) {
+            } else if (line.matches(".*[{].*[:].*") || line.matches(".*[{].*[;].*")) {
                 System.out.println("khat_chini in line: " + lineN);
             }
+
         }
 
         if (line.contains("else")) {
@@ -125,19 +131,33 @@ public class Main {
 
     public static void checkSemi(String line, int lineN) {
         int count = 0;
+        int count1 = 0;
         for (int i = 0; i < line.length(); i++) {
-            if (line.charAt(i) == ';') {
+            if (line.charAt(i) == ';' && !line.trim().startsWith("for")) {
                 count++;
+                if (count > 0) {
+                    for (int j = i + 1; j < line.length(); j++) {
+                        if (line.charAt(j) != ' ') {
+                            count1++;
+                        }
+
+                    }
+                }
             }
         }
         if (count > 1 && !line.contains("for")) {
             System.out.printf("semicolon error in line %d\n", lineN);
+        }
+        if (count1 > 0) {
+            System.out.printf("khat_chini error in line %d\n", lineN);
         }
     }
 
     public static void checkLength(String line, int lineN) {
         if (line.length() > 80) {
             System.out.printf("line.length in line %d\n", lineN);
+            System.out.println(line.substring(0, line.indexOf(',', 80) + 1));
+            System.out.println("                          " + line.substring(line.indexOf(',', 80) + 1, line.length()));
         }
     }
 
@@ -187,12 +207,13 @@ public class Main {
 
     public static int checkKoroThree(String line, int lineCount, String loopCheck) {
         if (line.contains("break") && loopCheck.equals("")) {
+
             if (line.contains(":")) {
                 System.out.printf("semicolon error in line %d\n", lineCount);
             }
             return -1;
         }
-        if (line.contains("case") && !line.contains(";")) {
+        if (line.contains("case")) {
             return 1;
         }
         if (line.contains("default") && !line.contains(";")) {
@@ -233,6 +254,25 @@ public class Main {
         } else {
 
             return "";
+        }
+    }
+
+    public static boolean defExCheck(String line, Boolean swiCheck, int koroCount, int korocheck1, String defExCheck) {
+        if (line.contains("switch") && swiCheck == false) {
+            korocheck1 = koroCount;
+            return true;
+        }
+        if (line.contains("}") && swiCheck == true && defExCheck == "") {
+            if (defExCheck == "") {
+                System.out.println("hjj");
+            }
+            return false;
+        }
+
+        else if (swiCheck == true) {
+            return true;
+        } else {
+            return false;
         }
     }
 }
