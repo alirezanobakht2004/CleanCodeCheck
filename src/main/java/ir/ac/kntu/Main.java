@@ -80,50 +80,7 @@ public class Main {
 
     public static void checkVar(String line, int lineN) {
         if (checkVar2(line, lineN)) {
-            if (line.trim().startsWith("int[]") || line.trim().startsWith("float[]")
-                    || line.trim().startsWith("double[]") || line.trim().startsWith("String[]") ||
-                    line.trim().startsWith("boolean[]") || line.trim().startsWith("char[]")
-                    || line.trim().startsWith("long[]") || line.trim().startsWith("byte[]")) {
-                int endIndex = 1000;
-                if (line.contains(",")) {
-                    System.out.println("too many var declrations in one line : " + " in Line: " + lineN);
-                }
-                for (int i = line.indexOf("]") + 2; i < line.length(); i++) {
-                    if (line.charAt(i) == ' ' || line.charAt(i) == ';' || line.charAt(i) == '=') {
-                        endIndex = i;
-                        break;
-                    }
-                }
-                String varName = line.substring(line.indexOf("]") + 2, endIndex);
-                if (varName.length() < 2) {
-                    System.out.println("varerror because its length is lower  : " + varName + " in Line: " + lineN);
-                }
-                if (!varName.matches("^[a-z]+([A-Z][a-z]*)*$")) {
-                    System.out.println("varerror : " + varName + " in Line: " + lineN);
-                }
-            }
-            if (line.matches("int .*") || line.matches("float .*") || line.matches("double .*")
-                    || line.matches("String .*")
-                    || line.matches("boolean .*") || line.matches("char .*") || line.matches("long .*")
-                    || line.matches("byte .*")) {
-                int endIndex = 1000;
-                if (line.contains(",")) {
-                    System.out.println("too many var declrations in one line : " + " in Line: " + lineN);
-                }
-                for (int i = line.indexOf(" ") + 1; i < line.length(); i++) {
-                    if (line.charAt(i) == ' ' || line.charAt(i) == ';' || line.charAt(i) == '=') {
-                        endIndex = i;
-                        break;
-                    }
-                }
-                String varName = line.substring(line.indexOf(" ") + 1, endIndex);
-                if (varName.length() < 2) {
-                    System.out.println("varerror because its length is lower than 2 : " + varName + " in Line: " + lineN);
-                }
-                if (!varName.matches("^[a-z]+([A-Z][a-z]*)*$")) {
-                    System.out.println("varerror : " + varName + " in Line: " + lineN);
-                }
-            }
+            checkVarr(line, lineN);
         } else {
             int y = 0;
             for (int i = line.length() - 1; i > 0; i--) {
@@ -140,6 +97,54 @@ public class Main {
                 System.out.println("varerror : " + h + " in Line: " + lineN);
             }
         }
+    }
+
+    public static void checkVarr(String line, int lineN) {
+        if (line.trim().startsWith("int[]") || line.trim().startsWith("float[]")
+                || line.trim().startsWith("double[]") || line.trim().startsWith("String[]") ||
+                line.trim().startsWith("boolean[]") || line.trim().startsWith("char[]")
+                || line.trim().startsWith("long[]") || line.trim().startsWith("byte[]")) {
+            int endIndex = 1000;
+            if (line.contains(",")) {
+                System.out.println("too many var declrations in one line : " + " in Line: " + lineN);
+            }
+            for (int i = line.indexOf("]") + 2; i < line.length(); i++) {
+                if (line.charAt(i) == ' ' || line.charAt(i) == ';' || line.charAt(i) == '=') {
+                    endIndex = i;
+                    break;
+                }
+            }
+            String varName = line.substring(line.indexOf("]") + 2, endIndex);
+            if (varName.length() < 2) {
+                System.out.println("varerror because its length is lower  : " + varName + " in Line: " + lineN);
+            }
+            if (!varName.matches("^[a-z]+([A-Z][a-z]*)*$")) {
+                System.out.println("varerror : " + varName + " in Line: " + lineN);
+            }
+        }
+        if (line.matches("int .*") || line.matches("float .*") || line.matches("double .*")
+                || line.matches("String .*")
+                || line.matches("boolean .*") || line.matches("char .*") || line.matches("long .*")
+                || line.matches("byte .*")) {
+            int endIndex = 1000;
+            if (line.contains(",")) {
+                System.out.println("too many var declrations in one line : " + " in Line: " + lineN);
+            }
+            for (int i = line.indexOf(" ") + 1; i < line.length(); i++) {
+                if (line.charAt(i) == ' ' || line.charAt(i) == ';' || line.charAt(i) == '=') {
+                    endIndex = i;
+                    break;
+                }
+            }
+            String varName = line.substring(line.indexOf(" ") + 1, endIndex);
+            if (varName.length() < 2) {
+                System.out.println("varerror because its length is lower than 2 : " + varName + " in Line: " + lineN);
+            }
+            if (!varName.matches("^[a-z]+([A-Z][a-z]*)*$")) {
+                System.out.println("varerror : " + varName + " in Line: " + lineN);
+            }
+        }
+
     }
 
     public static void checkVar1(String line, int lineN) {
