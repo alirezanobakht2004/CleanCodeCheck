@@ -127,14 +127,14 @@ public class Main {
                 }
             }
         } else {
-            int y=0;
+            int y = 0;
             for (int i = line.length() - 1; i > 0; i--) {
                 if (line.charAt(i) == ' ') {
-                     y = i;
-                     break;
+                    y = i;
+                    break;
                 }
             }
-            String h=line.substring(y+1, line.length()-1);
+            String h = line.substring(y + 1, line.length() - 1);
             if (h.length() < 2) {
                 System.out.println("varerror because its length is lower  : " + h + " in Line: " + lineN);
             }

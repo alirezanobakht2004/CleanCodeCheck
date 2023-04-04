@@ -27,6 +27,6 @@ public class Test2 {
     }
 
     public static void lowerCamelCase(double score) {
-        int           Lop;
+        int Lop;
     }
 }
