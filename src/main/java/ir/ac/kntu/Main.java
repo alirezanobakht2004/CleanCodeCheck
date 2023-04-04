@@ -20,8 +20,7 @@ public class Main {
         int lineCount = 1;
         String defCheck = "";
         String loopCheck = "";
-        boolean swiCheck = false;
-        int korocheck1 = 1;
+        String swiCheck = "";
         Scanner scanner = new Scanner(System.in);
         String fileName = scanner.nextLine();
         BufferedReader reader;
@@ -34,8 +33,9 @@ public class Main {
 
                 koroCount += checkKoro(strCheck(line));
                 koroCount += checkKoroOne(strCheck(line), defCheck);
+                defExCheck(strCheck(line), defCheck, swiCheck, lineCount);
+                swiCheck = defExCheck(strCheck(line), swiCheck);
 
-                swiCheck = defExCheck(strCheck(line), swiCheck, koroCount, korocheck1, defCheck);
                 defCheck = defCeck(strCheck(line), defCheck);
                 loopCheck = loopCheck(strCheck(line), loopCheck);
 
@@ -156,8 +156,30 @@ public class Main {
     public static void checkLength(String line, int lineN) {
         if (line.length() > 80) {
             System.out.printf("line.length in line %d\n", lineN);
-            System.out.println(line.substring(0, line.indexOf(',', 80) + 1));
-            System.out.println("                          " + line.substring(line.indexOf(',', 80) + 1, line.length()));
+            if (line.contains(",") && line.contains("(") && !line.contains("=")) {
+                System.out.println("\n");
+                System.out.println("It is better to write like this:");
+                int x = line.indexOf(',', 80) + 1;
+                if (x == 0) {
+                    x = line.lastIndexOf(',') + 1;
+                }
+                System.out.println(line.substring(0, x));
+                System.out.println(spaceMaker(line.indexOf("(")) + line.substring(x, line.length()));
+                System.out.println("\n");
+            }
+            int y = 0;
+            if (line.contains("=") && !line.contains(",")) {
+                for (int i = 80; i < line.length(); i++) {
+                    if (isOperator(line.charAt(i))) {
+                        y = i;
+                        break;
+                    }
+                }
+                System.out.println("\n");
+                System.out.println("It is better to write like this:");
+                System.out.println(line.substring(0, y));
+                System.out.println(spaceMaker(line.indexOf("=")) + line.substring(y, line.length()));
+            }
         }
     }
 
@@ -257,22 +279,34 @@ public class Main {
         }
     }
 
-    public static boolean defExCheck(String line, Boolean swiCheck, int koroCount, int korocheck1, String defExCheck) {
-        if (line.contains("switch") && swiCheck == false) {
-            korocheck1 = koroCount;
-            return true;
-        }
-        if (line.contains("}") && swiCheck == true && defExCheck == "") {
-            if (defExCheck == "") {
-                System.out.println("hjj");
-            }
-            return false;
-        }
-
-        else if (swiCheck == true) {
-            return true;
+    public static String defExCheck(String line, String defExCheck) {
+        if (line.contains("switch")) {
+            return "switch";
+        } else if (defExCheck == "switch" && !line.contains("}")) {
+            return "switch";
+        } else if (defExCheck == "switch" && line.contains("}")) {
+            return "";
         } else {
-            return false;
+            return "";
         }
+    }
+
+    public static void defExCheck(String line, String def, String defExCheck, int lineN) {
+        if (line.contains("}") && !def.contains("default") && defExCheck == "switch") {
+            System.out.println("There is no default in : " + lineN);
+        }
+    }
+
+    public static String spaceMaker(int m) {
+        String spaces = "";
+        for (int i = 0; i < m; i++) {
+            spaces += " ";
+        }
+        return spaces;
+    }
+
+    public static Boolean isOperator(char c) {
+        return c == '+' || c == '-' || c == '*' || c == '/' ||
+                c == '=' || c == '%';
     }
 }
