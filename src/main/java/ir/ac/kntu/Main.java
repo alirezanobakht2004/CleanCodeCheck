@@ -82,9 +82,27 @@ public class Main {
 
     public static void checkVar(String line, int lineN) {
         if (checkVar2(line, lineN)) {
-            if(line.matches("int[[] .*"))
-            {
-                System.out.println("lkdkl");
+            if (line.trim().startsWith("int[]") || line.trim().startsWith("float[]")
+                    || line.trim().startsWith("double[]") || line.trim().startsWith("String[]") ||
+                    line.trim().startsWith("boolean[]") || line.trim().startsWith("char[]")
+                    || line.trim().startsWith("long[]") || line.trim().startsWith("byte[]")) {
+                int endIndex = 1000;
+                if (line.contains(",")) {
+                    System.out.println("too many var declrations in one line : " + " in Line: " + lineN);
+                }
+                for (int i = line.indexOf("]") + 2; i < line.length(); i++) {
+                    if (line.charAt(i) == ' ' || line.charAt(i) == ';' || line.charAt(i) == '=') {
+                        endIndex = i;
+                        break;
+                    }
+                }
+                String varName = line.substring(line.indexOf("]") + 2, endIndex);
+                if (varName.length() < 2) {
+                    System.out.println("varerror because its length is lower  : " + varName + " in Line: " + lineN);
+                }
+                if (!varName.matches("^[a-z]+([A-Z][a-z]*)*$")) {
+                    System.out.println("varerror : " + varName + " in Line: " + lineN);
+                }
             }
             if (line.matches("int .*") || line.matches("float .*") || line.matches("double .*")
                     || line.matches("String .*")
@@ -109,9 +127,20 @@ public class Main {
                 }
             }
         } else {
-            String tmp = line.replaceAll("([0-9]) ([0-9a-zA-Z])", "\1\n\2");
-            String out = tmp.replaceAll("([a-zA-Z]) ([0-9])", "\1\n\2");
-            int x = 0;
+            int y=0;
+            for (int i = line.length() - 1; i > 0; i--) {
+                if (line.charAt(i) == ' ') {
+                     y = i;
+                     break;
+                }
+            }
+            String h=line.substring(y+1, line.length()-1);
+            if (h.length() < 2) {
+                System.out.println("varerror because its length is lower  : " + h + " in Line: " + lineN);
+            }
+            if (!h.matches("^[a-z]+([A-Z][a-z]*)*$")) {
+                System.out.println("varerror : " + h + " in Line: " + lineN);
+            }
         }
     }
 
