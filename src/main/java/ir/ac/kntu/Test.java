@@ -18,6 +18,8 @@ public class Test {
                 break;
             case 2:
                 break;
+            default:
+                break;
         }
         switch (day) {
             case 1:
@@ -69,11 +71,14 @@ public class Test {
         for (int j = 0; j > 10; j++) {
             System.out.println("jlkdl");
             break;
+
         }
         int day = 4;
         switch (day) {
             case 1:
                 System.out.println("Monday");
+                break;
+            default:
                 break;
         }
         if (2 == 2) {

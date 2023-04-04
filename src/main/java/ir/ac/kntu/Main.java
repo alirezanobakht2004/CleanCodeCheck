@@ -282,9 +282,9 @@ public class Main {
     public static String defExCheck(String line, String defExCheck) {
         if (line.contains("switch")) {
             return "switch";
-        } else if (defExCheck == "switch" && !line.contains("}")) {
+        } else if (defExCheck.equals("switch") && !line.contains("}")) {
             return "switch";
-        } else if (defExCheck == "switch" && line.contains("}")) {
+        } else if (defExCheck.equals("switch") && line.contains("}")) {
             return "";
         } else {
             return "";
@@ -292,7 +292,7 @@ public class Main {
     }
 
     public static void defExCheck(String line, String def, String defExCheck, int lineN) {
-        if (line.contains("}") && !def.contains("default") && defExCheck == "switch") {
+        if (line.contains("}") && !def.contains("default") && defExCheck.equals("switch")) {
             System.out.println("There is no default in : " + lineN);
         }
     }
