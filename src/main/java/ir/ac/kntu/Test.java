@@ -69,7 +69,7 @@ public class Test {
     public static void uhw(int cjadskjjas, int cjadskjjas1, int cjadskjjas2, int cjadskjjas3, int cjadskjjas4) {
         int x = 8;
         for (int j = 0; j > 10; j++) {
-            int Alireza;
+            int alireza;
             System.out.println("jlkdl");
             break;
 

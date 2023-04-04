@@ -13,7 +13,7 @@ public class Test2 {
         }
     }
 
-    public static boolean check(int i, int da, int D, int e, int c) {
+    public static boolean check(int i, int da, int d, int e, int c) {
         switch (1) {
             case 1: {
                 break;
@@ -27,6 +27,6 @@ public class Test2 {
     }
 
     public static void lowerCamelCase(double score) {
-        int Lop;
+        int lop;
     }
 }
