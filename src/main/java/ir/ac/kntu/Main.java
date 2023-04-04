@@ -75,8 +75,7 @@ public class Main {
             if (!methodName.matches("^[a-z]+([A-Z][a-z]*)*$")) {
                 System.out.println("methoderror method:  " + methodName + " in Line: " + lineN);
             }
-            if(methodName.length()<2)
-            {
+            if (methodName.length() < 2) {
                 System.out.println("methodname is lower than 2 :" + methodName + " in Line: " + lineN);
             }
         }
@@ -104,8 +103,10 @@ public class Main {
     }
 
     public static void checkVarr(String line, int lineN) {
-        if (line.trim().startsWith("int[]") || line.trim().startsWith("float[]") || line.trim().startsWith("double[]") || line.trim().startsWith("String[]") ||
-                line.trim().startsWith("boolean[]") || line.trim().startsWith("char[]") || line.trim().startsWith("long[]") || line.trim().startsWith("byte[]")) {
+        if (line.trim().startsWith("int[]") || line.trim().startsWith("float[]") || line.trim().startsWith("double[]")
+                || line.trim().startsWith("String[]") ||
+                line.trim().startsWith("boolean[]") || line.trim().startsWith("char[]")
+                || line.trim().startsWith("long[]") || line.trim().startsWith("byte[]")) {
             int endIndex = 1000;
             if (line.contains(",")) {
                 System.out.println("too many var declrations in one line : " + " in Line: " + lineN);
