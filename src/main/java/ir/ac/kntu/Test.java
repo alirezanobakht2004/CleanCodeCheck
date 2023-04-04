@@ -19,7 +19,7 @@ public class Test {
             case 2:
                 break;
             default:
-                break;
+                System.out.println("afjk");
         }
         switch (day) {
             case 1:
@@ -69,6 +69,7 @@ public class Test {
     public static void uhw(int cjadskjjas, int cjadskjjas1, int cjadskjjas2, int cjadskjjas3, int cjadskjjas4) {
         int x = 8;
         for (int j = 0; j > 10; j++) {
+            int Alireza;
             System.out.println("jlkdl");
             break;
 
@@ -79,7 +80,7 @@ public class Test {
                 System.out.println("Monday");
                 break;
             default:
-                break;
+                System.out.println("akjd");
         }
         if (2 == 2) {
             System.out.println("kfkf");

@@ -46,6 +46,7 @@ public class Main {
                 checkCase(strCheck(line), lineCount);
                 checkLoopIf(strCheck(line), lineCount);
                 checkVar(line.trim(), lineCount);
+                checkVar1(line.trim(), lineCount);
                 checkSemi(strCheck(line), lineCount);
                 checkLength(line, lineCount);
                 checkPackage(strCheck(line), lineCount);
@@ -80,22 +81,59 @@ public class Main {
     }
 
     public static void checkVar(String line, int lineN) {
-        if (line.matches("int.*") || line.matches("float.*") || line.matches("double.*") || line.matches("String.*")
-                || line.matches("boolean.*") || line.matches("char.*") || line.matches("long.*")
-                || line.matches("byte.*")) {
-            int endIndex = 1000;
-
-            for (int i = line.indexOf(" ") + 1; i < line.length(); i++) {
-                if (line.charAt(i) == ' ' || line.charAt(i) == ';' || line.charAt(i) == '=') {
-                    endIndex = i;
-                    break;
+        if (checkVar2(line, lineN)) {
+            if(line.matches("int[[] .*"))
+            {
+                System.out.println("lkdkl");
+            }
+            if (line.matches("int .*") || line.matches("float .*") || line.matches("double .*")
+                    || line.matches("String .*")
+                    || line.matches("boolean .*") || line.matches("char .*") || line.matches("long .*")
+                    || line.matches("byte .*")) {
+                int endIndex = 1000;
+                if (line.contains(",")) {
+                    System.out.println("too many var declrations in one line : " + " in Line: " + lineN);
+                }
+                for (int i = line.indexOf(" ") + 1; i < line.length(); i++) {
+                    if (line.charAt(i) == ' ' || line.charAt(i) == ';' || line.charAt(i) == '=') {
+                        endIndex = i;
+                        break;
+                    }
+                }
+                String varName = line.substring(line.indexOf(" ") + 1, endIndex);
+                if (varName.length() < 2) {
+                    System.out.println("varerror because its length is lower  : " + varName + " in Line: " + lineN);
+                }
+                if (!varName.matches("^[a-z]+([A-Z][a-z]*)*$")) {
+                    System.out.println("varerror : " + varName + " in Line: " + lineN);
                 }
             }
-            String varName = line.substring(line.indexOf(" ") + 1, endIndex);
-            if (!varName.matches("^[a-z]+([A-Z][a-z]*)*$")) {
-                System.out.println("varerror : " + varName + " in Line: " + lineN);
+        } else {
+            String tmp = line.replaceAll("([0-9]) ([0-9a-zA-Z])", "\1\n\2");
+            String out = tmp.replaceAll("([a-zA-Z]) ([0-9])", "\1\n\2");
+            int x = 0;
+        }
+    }
+
+    public static void checkVar1(String line, int lineN) {
+        if (line.contains("(") && line.contains(")") && !line.contains("main") && line.contains("public")) {
+            String varCheck = line.substring(line.indexOf("(") + 1, line.indexOf(")"));
+            String[] arrvar = varCheck.split(", ");
+            for (int o = 0; o < arrvar.length; o++) {
+                String x = arrvar[o];
+                checkVar(x + ";", lineN);
             }
         }
+    }
+
+    public static boolean checkVar2(String line, int lineN) {
+        if (line.matches("int  .*") || line.matches("float  .*") || line.matches("double  .*")
+                || line.matches("String  .*")
+                || line.matches("boolean  .*") || line.matches("char  .*") || line.matches("long  .*")
+                || line.matches("byte  .*")) {
+            return false;
+        }
+        return true;
     }
 
     public static boolean checkSp(String line, int num) {
@@ -115,8 +153,11 @@ public class Main {
         if (line.contains("while") || line.contains("for") || line.contains("if") || line.contains("else")
                 || line.contains("switch")) {
             if (!line.contains("{")) {
-                System.out.println("khat_chini in line: " + lineN);
+                System.out.println("khat_chini in line: " + (lineN + 1));
             } else if (line.matches(".*[{].*[:].*") || line.matches(".*[{].*[;].*")) {
+                System.out.println("khat_chini in line: " + lineN);
+            }
+            if (line.contains("}")) {
                 System.out.println("khat_chini in line: " + lineN);
             }
 
@@ -307,6 +348,6 @@ public class Main {
 
     public static Boolean isOperator(char c) {
         return c == '+' || c == '-' || c == '*' || c == '/' ||
-                c == '=' || c == '%';
+                c == '=' || c == '%' || c == '|' || c == '^';
     }
 }
