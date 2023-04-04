@@ -35,10 +35,8 @@ public class Main {
                 koroCount += checkKoroOne(strCheck(line), defCheck);
                 defExCheck(strCheck(line), defCheck, swiCheck, lineCount);
                 swiCheck = defExCheck(strCheck(line), swiCheck);
-
                 defCheck = defCeck(strCheck(line), defCheck);
                 loopCheck = loopCheck(strCheck(line), loopCheck);
-
                 checkSpace(strCheck(line), koroCount, lineCount);
                 koroCount += checkKoroTwo(strCheck(line));
                 koroCount += checkKoroThree(strCheck(line), lineCount, loopCheck);
@@ -120,7 +118,7 @@ public class Main {
                 }
                 String varName = line.substring(line.indexOf(" ") + 1, endIndex);
                 if (varName.length() < 2) {
-                    System.out.println("varerror because its length is lower  : " + varName + " in Line: " + lineN);
+                    System.out.println("varerror because its length is lower than 2 : " + varName + " in Line: " + lineN);
                 }
                 if (!varName.matches("^[a-z]+([A-Z][a-z]*)*$")) {
                     System.out.println("varerror : " + varName + " in Line: " + lineN);
