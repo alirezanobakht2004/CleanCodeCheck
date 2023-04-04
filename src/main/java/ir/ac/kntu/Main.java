@@ -75,6 +75,10 @@ public class Main {
             if (!methodName.matches("^[a-z]+([A-Z][a-z]*)*$")) {
                 System.out.println("methoderror method:  " + methodName + " in Line: " + lineN);
             }
+            if(methodName.length()<2)
+            {
+                System.out.println("methodname is lower than 2 :" + methodName + " in Line: " + lineN);
+            }
         }
     }
 
@@ -148,7 +152,7 @@ public class Main {
     public static void checkVar1(String line, int lineN) {
         if (line.contains("(") && line.contains(")") && !line.contains("main") && line.contains("public")) {
             String varCheck = line.substring(line.indexOf("(") + 1, line.indexOf(")"));
-            String[] arrvar = varCheck.split(", ");
+            String[] arrvar = varCheck.replace(",", ", ").split(", ");
             for (int o = 0; o < arrvar.length; o++) {
                 String x = arrvar[o];
                 checkVar(x + ";", lineN);
